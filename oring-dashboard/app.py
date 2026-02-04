@@ -68,7 +68,7 @@ if not df.empty:
 
     st.divider()
 
-    # --- ROW 1: PIE CHART & TOTAL BAR CHART ---
+# --- ROW 1: PIE CHART & TOTAL BAR CHART ---
     row1_col1, row1_col2 = st.columns(2)
     
     with row1_col1:
@@ -79,9 +79,14 @@ if not df.empty:
 
     with row1_col2:
         st.subheader("Total Defects (All Types)")
+        # Fixed: Plotly now expects 'Time_Slot' and 'count'
         total_binned = df['Time_Slot'].value_counts().reindex(labels).reset_index()
-        fig_total = px.bar(total_binned, x='index', y='Time_Slot', labels={'Time_Slot':'Count', 'index':'Time Slot'},
-                           template="plotly_dark", color_discrete_sequence=['#3498db'])
+        fig_total = px.bar(total_binned, 
+                           x='Time_Slot', 
+                           y='count', 
+                           labels={'count':'Total Defects', 'Time_Slot':'Time Slot'},
+                           template="plotly_dark", 
+                           color_discrete_sequence=['#3498db'])
         st.plotly_chart(fig_total, use_container_width=True)
 
     # --- ROW 2: SPECIFIC DEFECT BAR CHARTS ---
@@ -89,13 +94,17 @@ if not df.empty:
     st.subheader("Defect Specific Hourly Analysis")
     b1, b2, b3 = st.columns(3)
 
-    # Helper function to create the specific bar charts
     def create_defect_chart(defect_name, color):
         defect_df = df[df['Defect_Type'] == defect_name]
+        # Fixed: Ensuring column names match the bar chart call
         binned = defect_df['Time_Slot'].value_counts().reindex(labels).reset_index()
-        fig = px.bar(binned, x='index', y='Time_Slot', title=f"{defect_name} Distribution",
-                     labels={'Time_Slot':'Count', 'index':'Time Slot'},
-                     template="plotly_dark", color_discrete_sequence=[color])
+        fig = px.bar(binned, 
+                     x='Time_Slot', 
+                     y='count', 
+                     title=f"{defect_name} Distribution",
+                     labels={'count':'Count', 'Time_Slot':'Time Slot'},
+                     template="plotly_dark", 
+                     color_discrete_sequence=[color])
         return fig
 
     with b1:
@@ -107,5 +116,6 @@ if not df.empty:
 
 else:
     st.warning("Awaiting live data from Raspberry Pi...")
+
 
 
