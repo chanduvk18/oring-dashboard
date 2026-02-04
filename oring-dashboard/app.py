@@ -81,15 +81,36 @@ if not df.empty:
     m2.metric("Current Session Defects", len(current_session_df))
     m3.metric("Last Fault Detected", df['Timestamp'].max().strftime('%H:%M:%S'))
 
-    c1, c2 = st.columns(2)
-    with c1:
-        fig_bar = px.bar(df['Defect_Type'].value_counts().reset_index(), x='index', y='Defect_Type', 
-                         title="Defect Distribution (All History)", template="plotly_dark")
+# --- VISUALIZATIONS ---
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("Defect Distribution")
+        # Get counts and reset index
+        counts_df = df['Defect_Type'].value_counts().reset_index()
+        
+        # Plotly now expects 'Defect_Type' and 'count' as column names
+        fig_bar = px.bar(counts_df, 
+                         x='Defect_Type', 
+                         y='count', 
+                         labels={'Defect_Type': 'Defect Type', 'count': 'Total Count'},
+                         color='Defect_Type', 
+                         template="plotly_dark")
         st.plotly_chart(fig_bar, use_container_width=True)
-    with c2:
-        # Timeline of all detected faults
+
+    with col2:
+        st.subheader("Detection Timeline")
+        # Aggregating by hour for a smooth line chart
         df_time = df.set_index('Timestamp').resample('H').count().reset_index()
-        fig_line = px.line(df_time, x='Timestamp', y='Defect_Type', title="Defect Trend Line", template="plotly_dark")
+        
+        # Using 'count' or specific column name for y-axis
+        fig_line = px.line(df_time, 
+                          x='Timestamp', 
+                          y='Defect_Type', # This represents the count after resampling
+                          title="Defect Trend",
+                          template="plotly_dark", 
+                          markers=True)
         st.plotly_chart(fig_line, use_container_width=True)
 else:
     st.warning("No data found in Google Sheet. Check if Raspberry Pi has sent any detections.")
+
