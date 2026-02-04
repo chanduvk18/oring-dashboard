@@ -8,7 +8,7 @@ st.title("🏭 Industrial O-Ring Inspection Analytics")
 
 # 2. Connect to Data (Replace with your Sheet CSV link)
 # Tip: In Google Sheets, File > Share > Publish to Web > Select Sheet 1 as CSV
-SHEET_CSV_URL = "https://script.google.com/macros/s/AKfycbzNtMghS_xCZcZvJpEfYBLZnnjQwgzQNH48Wo52vRYkFOmD1T3k6unH4Bk2k8BmT_64FQ/exec"
+SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpPtnbWx6ktWSLKZguqumjJx86uTpTDxE5edOj95WWUWDcGrG2gOxY6avxeOxJGgR0n3FisNE0jWOF/pub?gid=0&single=true&output=csv"
 
 @st.cache_data(ttl=10) # Refresh data every 10 seconds
 def load_data():
@@ -54,3 +54,4 @@ try:
 
 except:
     st.warning("Waiting for data from Raspberry Pi... Make sure the Google Sheet is published to web as CSV.")
+
