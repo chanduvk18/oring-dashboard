@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 # --- CONFIGURATION ---
 # Replace with your Published Google Sheet CSV URL
-SHEET_URL = "YOUR_GOOGLE_SHEET_CSV_URL_HERE"
+SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSpPtnbWx6ktWSLKZguqumjJx86uTpTDxE5edOj95WWUWDcGrG2gOxY6avxeOxJGgR0n3FisNE0jWOF/pub?gid=0&single=true&output=csv"
 
 # Define your industrial thresholds for maintenance
 THRESHOLD_FLASHES = 50   # If > 50 flashes, blade is dull
@@ -68,5 +68,6 @@ try:
 
 except Exception as e:
     st.info("Awaiting live data from Raspberry Pi...")
+
 
 
